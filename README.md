@@ -1,96 +1,123 @@
 #include <stdio.h>
-#include <stdlib.h>
-struct tree
-{
-    int data;
-    struct tree *left, *right;
-};
-struct stack
-{
-    struct tree *tptr;
-    struct stack *next;
-};
-struct tree *create(int data)
-{
-    struct tree *node = (struct tree *)malloc(sizeof(struct tree));
-    node->data = data;
-    node->left = NULL;
-    node->right = NULL;
-    return node;
-}
+#include<stdlib.h>
+int arr[100],n;
+void display();
+void insert(int num,int loc);
+void del(int num);
 
-int isempty(struct stack *s)
-{
-    return (s == NULL ? 1 : 0);
-}
-void push(struct stack **topref, struct tree *ptr)
-{
-    struct stack *newnode = (struct stack *)malloc(sizeof(struct stack));
-    if (newnode == NULL)
-    {
-        printf("overflow\n");
-        exit(0);
-    }
-    else
-    {
-        newnode->tptr = ptr;
-        newnode->next = *topref;
-        *topref = newnode;
-    }
-}
-struct tree *pop(struct stack **topref)
-{
-    struct tree *res;
-    struct stack *s;
-    if (isempty(*topref))
-    {
-        printf("underflow\n");
-        exit(0);
-    }
-    else
-    {
-        s = *topref;
-        res = s->tptr;
-        *topref = s->next;
+void main()
+ {
+ int choice,num;
+ n=0;
+ while(1) 
+  {
+  printf("\n1.Insert\n");
+  printf("2.Delete\n");
+  printf("3.Display\n");
+  printf("4.Quit\n");
+  printf("\nEnter your choice : ");
+  scanf("%d",&choice);
+  switch(choice)
+   {
+    case 1:
+    printf("\nEnter the number to be inserted : ");
+    scanf("%d",&num);
+    insert(num,n);
+    n=n+1;
+    break;
+    case 2:
+    printf("\nEnter the number to be deleted : ");
+    scanf("%d",&num);
+    del(num);
+    break;
+    case 3:                                                 
+    display();
+    break;
+    case 4:
+    exit(0);
+   default: printf("\nWrong choice\n");
+   }
+  }
+ }
 
-        free(s);
-    }
-    return res;
-}
-void inorder(struct tree *root)
-{
-    struct tree *current = root;
-    struct stack *s = NULL;
-    int ans = 1;
-    while (ans != 0)
-    {
-        if (current != NULL)
-        {
-            push(&s, current);
-            current = current->left;
-        }
-        else
-        {
-            if (!isempty(s))
-            {
-                current = pop(&s);
-                printf("%d\t", current->data);
-                current = current->right;
-            }
-            else
-                ans = 0;
-        }
-    }
-}
-int main()
-{
+void display()
+ {
+ int i;
+ if(n==0)
+  {
+  printf("\nHeap is empty\n");
+  return;
+  }
+ for(i=0;i<n;i++)
+  printf("%d ",arr[i]);
+ printf("\n");
+ }
 
-    struct tree *root = NULL;
-    root = create(1);
-    root->left = create(2);
-    root->right = create(3);
-    root->left->left = create(4);
-    root->left->right = create(5);
-    printf("binary tree inoredr without recursion\n");
-    inorder(root);
-}
+void insert(int num,int loc)
+ {
+ int par;
+ while(loc>0)
+  {
+  par=(loc-1)/2;
+  if(num<=arr[par])
+   {
+   arr[loc]=num;
+   return;
+   }
+  arr[loc]=arr[par];
+  loc=par;
+  }
+ arr[0]=num;
+ }
+
+void del(int num)
+ {
+ int left,right,i,temp,par;
+ for(i=0;i<n;i++)
+  {
+  if(num==arr[i])
+   break;
+  }
+ if(num!=arr[i])
+  {
+  printf("\n%d not found in heap\n",num);
+  return;
+  }
+ arr[i]=arr[n-1];
+ n=n-1;
+ par=(i-1)/2;
+ if(arr[i] > arr[par])
+  {
+  insert( arr[i],i);
+  return;
+  }
+ left=2*i+1; 
+ right=2*i+2; 
+ while(right < n)
+  {
+  if(arr[i]>=arr[left] && arr[i]>=arr[right])
+   return;
+  if(arr[right]<=arr[left])
+   {
+   temp=arr[i];
+   arr[i]=arr[left];
+   arr[left]=temp;
+   i=left;
+   }
+  else
+   {
+   temp=arr[i];
+   arr[i]=arr[right];
+   arr[right]=temp;
+   i=right;
+   }
+  left=2*i+1;
+  right=2*i+2;
+  }
+ if( left==n-1 && arr[i]<arr[left] ) /* right==n */
+  {
+  temp=arr[i];
+  arr[i]=arr[left];
+  arr[left]=temp;
+  }
+ }

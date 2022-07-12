@@ -1,0 +1,49 @@
+#include <iostream>
+using namespace std;
+
+int binary_search(int arr[], int n, int key)
+{
+    int st = 0;
+    int en = n - 1;
+
+    while (st <= en)
+    {
+        int mid = st + (en - st) / 2;
+        if (arr[mid] == key)
+        {
+            return mid;
+        }
+
+        if (arr[mid] < key)
+        {
+            st = mid + 1;
+        }
+        else
+        {
+            en = mid - 1;
+        }
+    }
+    return -1;
+}
+
+int main()
+{
+    int n, key;
+
+    cout << "Size(array): ";
+    cin >> n;
+
+    int arr[n];
+
+    cout << "Elements in the array\n";
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    cout << "Searching element: ";
+    cin >> key;
+
+    int ans = binary_search(arr, n, key);
+
+    cout <<"The position of "<<key<<" is: "<< ans+1 << endl;
+    return 0;
+}

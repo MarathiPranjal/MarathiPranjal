@@ -1,0 +1,45 @@
+#include <iostream>
+using namespace std;
+
+void SelectionSort(int *arr, int n)
+{
+  int minimum;
+  for (int i = 0; i < n - 1; i++)
+  {
+    minimum = i;
+    for (int j = i + 1; j < n; j++)
+    {
+      if (arr[minimum] > arr[j])
+      {
+        minimum = j;
+      }
+      else
+      {
+      }
+    }
+    swap(arr[i], arr[minimum]);
+  }
+}
+
+int main()
+{
+  int n;
+
+  cout << "Enter the size of the array: ";
+  cin >> n;
+
+  int arr[n];
+
+  cout << "Enter the elements of the array\n";
+  for (int i = 0; i < n; i++)
+    cin >> arr[i];
+
+  SelectionSort(arr, n);
+
+  cout << "The Selection Sorted array is\n";
+
+  for (int i = 0; i < n; i++)
+    cout << arr[i] << " ";
+
+  return 0;
+}
